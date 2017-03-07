@@ -17,6 +17,11 @@
         android:title="@string/connection_title" />
 
     <Preference
+        android:icon="@drawable/ic_insert_drive_file_black_24dp"
+        android:key="@string/log_key"
+        android:title="@string/log_title" />
+
+    <Preference
         android:icon="@drawable/ic_info_outline_black_24dp"
         android:key="@string/license_key"
         android:title="@string/license_title" />

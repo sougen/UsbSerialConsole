@@ -49,6 +49,8 @@
 
     <string name="line_feed_code_title">Line feed code</string>
 
+    <string name="log_title">Log</string>
+    
     <string name="license_title">License</string>
 
     <string name="send_pref_category_title">Send</string>

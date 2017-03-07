@@ -49,6 +49,8 @@
 
     <string name="line_feed_code_title">改行コード</string>
 
+    <string name="log_title">ログ</string>
+
     <string name="license_title">ライセンス</string>
 
     <string name="send_pref_category_title">送信</string>
