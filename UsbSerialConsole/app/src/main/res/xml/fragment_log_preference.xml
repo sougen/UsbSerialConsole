@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/log_switch_storage_key"
+        android:summaryOff="@string/log_switch_save_location_summary_off"
+        android:summaryOn="@string/log_switch_save_location_summary_on"
+        android:title="@string/log_switch_save_location_title" />
+
+    <Preference
+        android:key="@string/log_directory_key"
+        android:title="@string/log_directory_title" />
+
+</PreferenceScreen>
