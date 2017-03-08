@@ -77,4 +77,6 @@
     <string name="color_console_text_title">Text</string>
     <string name="color_console_background_title">Background</string>
 
+    <string name="permission_storage_message">Permission is required for save logs to external storage</string>
+    <string name="permission_storeage_open_settings">Open settings</string>
 </resources>
