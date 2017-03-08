@@ -1,8 +1,13 @@
 package jp.sugnakys.usbserialconsole.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
+import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 
 import java.io.File;
@@ -24,7 +29,25 @@ public class Util {
     }
 
     public static File getLogDir(Context context) {
-        File file = new File(context.getExternalFilesDir(null), Constants.LOG_DIR_NAME);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        File file = null;
+        boolean isEnableExternalStorage = pref.getBoolean(context.getString(R.string.log_switch_storage_key), false);
+        int permissionCheck = PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (isEnableExternalStorage && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            // External storage
+            String path = pref.getString(context.getString(R.string.log_directory_key), null);
+            if (path != null) {
+                file = new File(path);
+            }
+        }
+
+        if (file == null) {
+            // Internal storage
+            file = getInternalDir(context);
+        }
+
         if (!file.exists()) {
             if (!file.mkdirs()) {
                 Log.e(TAG, "Error: Cannot create Log directory");
@@ -33,6 +56,19 @@ public class Util {
             }
         }
         return file;
+    }
+
+    public static boolean isInternalDir(Context context, File file) {
+        Log.d(TAG, "Target: " + file.getPath());
+
+        File internal = getInternalDir(context);
+        Log.d(TAG, "InternalDir: " + internal.getPath());
+
+        return file.equals(internal);
+    }
+
+    private static File getInternalDir(Context context) {
+        return new File(context.getExternalFilesDir(null), Constants.LOG_DIR_NAME);
     }
 
     public static void setScreenOrientation(String screenOrientation, Activity activity) {

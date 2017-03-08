@@ -239,7 +239,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public void onDestroy() {
-        if(isConnect) {
+        if (isConnect) {
             stopConnection();
         }
         unregisterReceiver(mUsbReceiver);
@@ -250,7 +250,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
             alertDialog.setMessage(getString(R.string.confirm_finish_text));
             alertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -361,16 +361,27 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void writeToFile(String data) {
-        String fileName = Util.getCurrentDateForFile() + Constants.LOG_EXT;
-        File dirName = Util.getLogDir(getApplicationContext());
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(new File(dirName, fileName));
+            String fileName = Util.getCurrentDateForFile() + Constants.LOG_EXT;
+            File dirName = Util.getLogDir(getApplicationContext());
+
+            File outputFile = new File(dirName, fileName);
+
+            fos = new FileOutputStream(outputFile);
             fos.write(data.getBytes(Constants.CHARSET));
-            Log.d(TAG, "Save: " + fileName);
-            Toast.makeText(this, getString(R.string.action_save_log)
-                    + " : " + fileName, Toast.LENGTH_SHORT).show();
+
+            Log.d(TAG, "Save: " + outputFile.getCanonicalPath());
+
+            String toastStr;
+            if (Util.isInternalDir(getApplicationContext(), dirName)) {
+                toastStr = getString(R.string.action_save_log) + " : " + fileName;
+            } else {
+                toastStr = getString(R.string.action_save_log) + " : " + outputFile.getCanonicalPath();
+            }
+            Toast.makeText(this, toastStr, Toast.LENGTH_SHORT).show();
+
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         } finally {
@@ -401,7 +412,7 @@ public class MainActivity extends BaseAppCompatActivity
         usbService.setHandler(mHandler);
         isConnect = true;
         Toast.makeText(getApplicationContext(),
-                getString(R.string.start_connection),Toast.LENGTH_SHORT).show();
+                getString(R.string.start_connection), Toast.LENGTH_SHORT).show();
         updateOptionsMenu();
     }
 
@@ -409,7 +420,7 @@ public class MainActivity extends BaseAppCompatActivity
         usbService.setHandler(null);
         isConnect = false;
         Toast.makeText(getApplicationContext(),
-                getString(R.string.stop_connection),Toast.LENGTH_SHORT).show();
+                getString(R.string.stop_connection), Toast.LENGTH_SHORT).show();
         updateOptionsMenu();
     }
 
