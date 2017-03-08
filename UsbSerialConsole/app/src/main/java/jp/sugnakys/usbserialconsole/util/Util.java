@@ -29,19 +29,7 @@ public class Util {
     }
 
     public static File getLogDir(Context context) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        File file = null;
-        boolean isEnableExternalStorage = pref.getBoolean(context.getString(R.string.log_switch_storage_key), false);
-        int permissionCheck = PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (isEnableExternalStorage && permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            // External storage
-            String path = pref.getString(context.getString(R.string.log_directory_key), null);
-            if (path != null) {
-                file = new File(path);
-            }
-        }
+        File file = getExternalDir(context);
 
         if (file == null) {
             // Internal storage
@@ -67,8 +55,26 @@ public class Util {
         return file.equals(internal);
     }
 
-    private static File getInternalDir(Context context) {
+    public static File getInternalDir(Context context) {
         return new File(context.getExternalFilesDir(null), Constants.LOG_DIR_NAME);
+    }
+
+    public static File getExternalDir(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        File file = null;
+        boolean isEnableExternalStorage = pref.getBoolean(context.getString(R.string.log_switch_storage_key), false);
+        int permissionCheck = PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (isEnableExternalStorage && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            // External storage
+            String path = pref.getString(context.getString(R.string.log_directory_key), null);
+            if (path != null) {
+                file = new File(path);
+            }
+        }
+
+        return file;
     }
 
     public static void setScreenOrientation(String screenOrientation, Activity activity) {

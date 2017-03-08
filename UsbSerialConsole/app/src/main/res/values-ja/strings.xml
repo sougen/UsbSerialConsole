@@ -51,8 +51,8 @@
 
     <string name="log_title">ログ</string>
     <string name="log_switch_save_location_title">外部ストレージに保存する</string>
-    <string name="log_switch_save_location_summary_on">外部ストレージ</string>
-    <string name="log_switch_save_location_summary_off">内部ストレージ</string>
+    <string name="log_external_storage">外部ストレージ</string>
+    <string name="log_internal_storage">内部ストレージ</string>
     <string name="log_directory_title">保存先</string>
 
     <string name="license_title">ライセンス</string>

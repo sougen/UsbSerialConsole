@@ -51,8 +51,8 @@
 
     <string name="log_title">Log</string>
     <string name="log_switch_save_location_title">Save external storage</string>
-    <string name="log_switch_save_location_summary_on">External storage</string>
-    <string name="log_switch_save_location_summary_off">Internal storage</string>
+    <string name="log_external_storage">External storage</string>
+    <string name="log_internal_storage">Internal storage</string>
     <string name="log_directory_title">Save location</string>
 
     <string name="license_title">License</string>

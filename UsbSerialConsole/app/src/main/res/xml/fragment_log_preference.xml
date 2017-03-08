@@ -4,8 +4,8 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/log_switch_storage_key"
-        android:summaryOff="@string/log_switch_save_location_summary_off"
-        android:summaryOn="@string/log_switch_save_location_summary_on"
+        android:summaryOff="@string/log_internal_storage"
+        android:summaryOn="@string/log_external_storage"
         android:title="@string/log_switch_save_location_title" />
 
     <Preference

@@ -62,6 +62,9 @@ public class LogPreferenceFragment extends BasePreferenceFragment
         checkStoragePermission();
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (!pref.contains(getString(R.string.log_directory_key))) {
+            setSaveLocation(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
+        }
         saveLocationPreference.setSummary(pref.getString(getString(R.string.log_directory_key), android.os.Environment.getExternalStorageDirectory().getAbsolutePath()));
         setSaveLocationEnable(switchStoragePreference.isChecked());
     }
@@ -183,12 +186,15 @@ public class LogPreferenceFragment extends BasePreferenceFragment
     public void onSelectDirectory(@NonNull String path) {
         mDialog.dismiss();
 
+        setSaveLocation(path);
+        saveLocationPreference.setSummary(path);
+    }
+
+    private void setSaveLocation(String path) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(getString(R.string.log_directory_key), path);
         editor.apply();
-
-        saveLocationPreference.setSummary(path);
     }
 
     @Override
