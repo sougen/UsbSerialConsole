@@ -36,9 +36,6 @@
         <activity
             android:name=".LogListViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LogViewActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".UsbService"

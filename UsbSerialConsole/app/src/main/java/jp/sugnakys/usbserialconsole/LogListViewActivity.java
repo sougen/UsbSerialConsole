@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +16,6 @@ import android.widget.ListView;
 
 import java.io.File;
 
-import jp.sugnakys.usbserialconsole.util.Constants;
 import jp.sugnakys.usbserialconsole.util.Util;
 
 public class LogListViewActivity extends BaseAppCompatActivity
@@ -98,8 +98,9 @@ public class LogListViewActivity extends BaseAppCompatActivity
         Context context = getApplicationContext();
         File targetFile = new File(Util.getLogDir(context), selectedItem);
 
-        Intent intent = new Intent(getApplicationContext(), LogViewActivity.class);
-        intent.putExtra(Constants.EXTRA_LOG_FILE, targetFile);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(targetFile), "text/plain");
         startActivity(intent);
     }
 

@@ -60,8 +60,6 @@
     <string name="send_pref_category_title">Send</string>
     <string name="receive_pref_category_title">Receive</string>
 
-    <string name="action_send_to">Send to</string>
-
     <string name="confirm_connect">Connect device?</string>
 
     <string name="start_connection">Connection start</string>

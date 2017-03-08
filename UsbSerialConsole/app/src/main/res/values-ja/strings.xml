@@ -60,8 +60,6 @@
     <string name="send_pref_category_title">送信</string>
     <string name="receive_pref_category_title">受信</string>
 
-    <string name="action_send_to">送る</string>
-
     <string name="confirm_connect">デバイスとの通信を開始しますか?</string>
 
     <string name="start_connection">通信を開始しました</string>
