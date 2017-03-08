@@ -361,16 +361,27 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void writeToFile(String data) {
-        String fileName = Util.getCurrentDateForFile() + Constants.LOG_EXT;
-        File dirName = Util.getLogDir(getApplicationContext());
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(new File(dirName, fileName));
+            String fileName = Util.getCurrentDateForFile() + Constants.LOG_EXT;
+            File dirName = Util.getLogDir(getApplicationContext());
+
+            File outputFile = new File(dirName, fileName);
+
+            fos = new FileOutputStream(outputFile);
             fos.write(data.getBytes(Constants.CHARSET));
-            Log.d(TAG, "Save: " + fileName);
-            Toast.makeText(this, getString(R.string.action_save_log)
-                    + " : " + fileName, Toast.LENGTH_SHORT).show();
+
+            Log.d(TAG, "Save: " + outputFile.getCanonicalPath());
+
+            String toastStr;
+            if (Util.isInternalDir(getApplicationContext(), dirName)) {
+                toastStr = getString(R.string.action_save_log) + " : " + fileName;
+            } else {
+                toastStr = getString(R.string.action_save_log) + " : " + outputFile.getCanonicalPath();
+            }
+            Toast.makeText(this, toastStr, Toast.LENGTH_SHORT).show();
+
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         } finally {
