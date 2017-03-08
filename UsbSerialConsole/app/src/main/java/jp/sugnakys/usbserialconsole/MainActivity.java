@@ -239,7 +239,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public void onDestroy() {
-        if(isConnect) {
+        if (isConnect) {
             stopConnection();
         }
         unregisterReceiver(mUsbReceiver);
@@ -250,7 +250,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
             alertDialog.setMessage(getString(R.string.confirm_finish_text));
             alertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -412,7 +412,7 @@ public class MainActivity extends BaseAppCompatActivity
         usbService.setHandler(mHandler);
         isConnect = true;
         Toast.makeText(getApplicationContext(),
-                getString(R.string.start_connection),Toast.LENGTH_SHORT).show();
+                getString(R.string.start_connection), Toast.LENGTH_SHORT).show();
         updateOptionsMenu();
     }
 
@@ -420,7 +420,7 @@ public class MainActivity extends BaseAppCompatActivity
         usbService.setHandler(null);
         isConnect = false;
         Toast.makeText(getApplicationContext(),
-                getString(R.string.stop_connection),Toast.LENGTH_SHORT).show();
+                getString(R.string.stop_connection), Toast.LENGTH_SHORT).show();
         updateOptionsMenu();
     }
 
