@@ -136,7 +136,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
                             new AlertDialog.Builder(getActivity())
                                     .setMessage(getString(R.string.permission_storage_message))
                                     .setPositiveButton(android.R.string.ok, null)
-                                    .setNeutralButton(R.string.permission_storeage_open_settings,
+                                    .setNeutralButton(R.string.permission_storage_open_settings,
                                             new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
