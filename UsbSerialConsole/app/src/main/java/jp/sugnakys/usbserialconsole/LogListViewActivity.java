@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
+import jp.sugnakys.usbserialconsole.util.Constants;
 import jp.sugnakys.usbserialconsole.util.Util;
 
 public class LogListViewActivity extends BaseAppCompatActivity
@@ -64,7 +66,7 @@ public class LogListViewActivity extends BaseAppCompatActivity
     }
 
     private String[] getFileNameList() {
-        File[] file = Util.getLogDir(getApplicationContext()).listFiles();
+        File[] file = Util.getLogDir(getApplicationContext()).listFiles(new FileFilter());
         if (file == null) {
             Log.w(TAG, "File not found");
             return null;
@@ -126,5 +128,11 @@ public class LogListViewActivity extends BaseAppCompatActivity
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
         return true;
+    }
+
+    private class FileFilter implements FilenameFilter {
+        public boolean accept(File dir, String name) {
+            return name.matches(Constants.LOG_EXT_MATCH);
+        }
     }
 }

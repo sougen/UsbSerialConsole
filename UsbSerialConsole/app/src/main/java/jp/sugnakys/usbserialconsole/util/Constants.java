@@ -3,6 +3,7 @@ package jp.sugnakys.usbserialconsole.util;
 public class Constants {
     public static final String LOG_DIR_NAME = "Log";
     public static final String LOG_EXT = ".txt";
+    public static final String LOG_EXT_MATCH = ".*\\.txt$";
 
     public static final String CHARSET = "UTF-8";
 
