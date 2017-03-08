@@ -49,6 +49,12 @@
 
     <string name="line_feed_code_title">改行コード</string>
 
+    <string name="log_title">ログ</string>
+    <string name="log_switch_save_location_title">外部ストレージに保存する</string>
+    <string name="log_switch_save_location_summary_on">外部ストレージ</string>
+    <string name="log_switch_save_location_summary_off">内部ストレージ</string>
+    <string name="log_directory_title">保存先</string>
+
     <string name="license_title">ライセンス</string>
 
     <string name="send_pref_category_title">送信</string>
@@ -71,4 +77,6 @@
     <string name="color_console_text_title">テキスト</string>
     <string name="color_console_background_title">背景</string>
 
+    <string name="permission_storage_message">外部ストレージにログを保存するための権限が必要です</string>
+    <string name="permission_storeage_open_settings">設定を開く</string>
 </resources>

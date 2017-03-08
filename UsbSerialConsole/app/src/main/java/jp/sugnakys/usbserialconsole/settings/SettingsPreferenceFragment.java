@@ -21,6 +21,7 @@ public class SettingsPreferenceFragment extends BasePreferenceFragment
                 getString(R.string.serial_port_key),
                 getString(R.string.display_key),
                 getString(R.string.connection_key),
+                getString(R.string.log_key),
                 getString(R.string.license_key)};
 
         for (String prefKey : prefKeys) {
@@ -57,6 +58,9 @@ public class SettingsPreferenceFragment extends BasePreferenceFragment
         } else if (key.equals(getString(R.string.connection_key))) {
             simpleName = ConnectionPreferenceFragment.class.getSimpleName();
             fragment = new ConnectionPreferenceFragment();
+        } else if (key.equals(getString(R.string.log_key))) {
+            simpleName = LogPreferenceFragment.class.getSimpleName();
+            fragment = new LogPreferenceFragment();
         } else if (key.equals(getString(R.string.license_key))) {
             DialogFragment licenseFragment = new LicenseDialogFragment();
             licenseFragment.show(getFragmentManager(), LicenseDialogFragment.class.getSimpleName());

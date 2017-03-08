@@ -49,6 +49,12 @@
 
     <string name="line_feed_code_title">Line feed code</string>
 
+    <string name="log_title">Log</string>
+    <string name="log_switch_save_location_title">Save external storage</string>
+    <string name="log_switch_save_location_summary_on">External storage</string>
+    <string name="log_switch_save_location_summary_off">Internal storage</string>
+    <string name="log_directory_title">Save location</string>
+
     <string name="license_title">License</string>
 
     <string name="send_pref_category_title">Send</string>
@@ -71,4 +77,6 @@
     <string name="color_console_text_title">Text</string>
     <string name="color_console_background_title">Background</string>
 
+    <string name="permission_storage_message">Permission is required for save logs to external storage</string>
+    <string name="permission_storeage_open_settings">Open settings</string>
 </resources>
