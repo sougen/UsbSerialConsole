@@ -23,6 +23,7 @@ import com.felhr.usbserial.UsbSerialInterface;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.util.Constants;
 
@@ -96,10 +97,10 @@ public class UsbService extends Service {
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
+            switch (Objects.requireNonNull(intent.getAction())) {
                 case ACTION_USB_PERMISSION:
                     boolean granted =
-                            intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
+                            Objects.requireNonNull(intent.getExtras()).getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
                     if (granted) {
                         Intent in = new Intent(ACTION_USB_PERMISSION_GRANTED);
                         context.sendBroadcast(in);

@@ -2,7 +2,6 @@ package jp.sugnakys.usbserialconsole;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +30,7 @@ public class LogListViewActivity extends BaseAppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_list_view_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.action_log_list));
         setSupportActionBar(toolbar);
 
@@ -39,15 +38,10 @@ public class LogListViewActivity extends BaseAppCompatActivity
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener(view -> finish());
         }
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
     }
@@ -113,14 +107,12 @@ public class LogListViewActivity extends BaseAppCompatActivity
                 .setMessage(getResources().getString(R.string.delete_log_file_text) + "\n"
                         + getResources().getString(R.string.file_name) + ": " + selectedItem)
                 .setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Context context = getApplicationContext();
-                                File targetFile =
-                                        new File(Util.getLogDir(context), selectedItem);
-                                if (deleteLogFile(targetFile)) {
-                                    updateList();
-                                }
+                        (dialog, which) -> {
+                            Context context = getApplicationContext();
+                            File targetFile =
+                                    new File(Util.getLogDir(context), selectedItem);
+                            if (deleteLogFile(targetFile)) {
+                                updateList();
                             }
                         })
                 .setNegativeButton(android.R.string.cancel, null)

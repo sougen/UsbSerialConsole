@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.Objects;
+
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.UsbService;
 import jp.sugnakys.usbserialconsole.util.Log;
@@ -29,7 +31,7 @@ public class SerialPortPreferenceFragment extends BasePreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.serial_port_title));
     }
 
@@ -39,6 +41,6 @@ public class SerialPortPreferenceFragment extends BasePreferenceFragment {
 
         Log.d(TAG, "Restart UsbService");
         Intent intent = new Intent(UsbService.ACTION_SERIAL_CONFIG_CHANGED);
-        getActivity().sendBroadcast(intent);
+        Objects.requireNonNull(getActivity()).sendBroadcast(intent);
     }
 }

@@ -2,31 +2,28 @@ package jp.sugnakys.usbserialconsole.settings;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
-import net.rdrei.android.dirchooser.DirectoryChooserConfig;
-import net.rdrei.android.dirchooser.DirectoryChooserFragment;
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.util.Log;
 
 public class LogPreferenceFragment extends BasePreferenceFragment
-        implements Preference.OnPreferenceClickListener, DirectoryChooserFragment.OnFragmentInteractionListener, PermissionResultListener {
+        implements Preference.OnPreferenceClickListener, /*DirectoryChooserFragment.OnFragmentInteractionListener,*/ PermissionResultListener {
 
     private static final String TAG = "LogPreferenceFragment";
 
@@ -34,7 +31,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
 
     private SwitchPreference switchStoragePreference;
     private Preference saveLocationPreference;
-    private DirectoryChooserFragment mDialog;
+//    private DirectoryChooserFragment mDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +54,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.log_title));
 
         checkStoragePermission();
@@ -68,7 +65,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
     }
 
     private void checkStoragePermission() {
-        int permission = PermissionChecker.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission = PermissionChecker.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission == PackageManager.PERMISSION_GRANTED) {
             switchStoragePreference.setChecked(true);
         } else {
@@ -82,7 +79,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
 
         if (key.equals(getString(R.string.log_switch_storage_key))) {
             if (switchStoragePreference.isChecked()) {
-                int permissionCheck = PermissionChecker.checkSelfPermission(getActivity(),
+                int permissionCheck = PermissionChecker.checkSelfPermission(Objects.requireNonNull(getActivity()),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                     requestStoragePermission();
@@ -90,15 +87,16 @@ public class LogPreferenceFragment extends BasePreferenceFragment
             }
         } else if (key.equals(getString(R.string.log_directory_key))) {
             Log.d(TAG, android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
-            final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
-                    .initialDirectory(android.os.Environment.getExternalStorageDirectory().getAbsolutePath())
-                    .newDirectoryName("New Directory")
-                    .allowNewDirectoryNameModification(true)
-                    .build();
-
-            mDialog = DirectoryChooserFragment.newInstance(config);
-            mDialog.setTargetFragment(this, 0);
-            mDialog.show(getFragmentManager(), null);
+            // TODO Add directory choose library
+//            final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
+//                    .initialDirectory(android.os.Environment.getExternalStorageDirectory().getAbsolutePath())
+//                    .newDirectoryName("New Directory")
+//                    .allowNewDirectoryNameModification(true)
+//                    .build();
+//
+//            mDialog = DirectoryChooserFragment.newInstance(config);
+//            mDialog.setTargetFragment(this, 0);
+//            mDialog.show(getFragmentManager(), null);
         }
 
         return false;
@@ -108,7 +106,7 @@ public class LogPreferenceFragment extends BasePreferenceFragment
         Log.d(TAG, "requestStoragePermission");
 
         Activity activity = getActivity();
-        if (activity != null && activity instanceof SettingsActivity) {
+        if (activity instanceof SettingsActivity) {
             SettingsActivity settingsActivity = (SettingsActivity) activity;
             ActivityCompat.requestPermissions(settingsActivity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -119,50 +117,42 @@ public class LogPreferenceFragment extends BasePreferenceFragment
 
     public void onPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
         Log.d(TAG, "onPermissionResult");
-        switch (requestCode) {
-            case REQUEST_CODE_WRITE_STORAGE_PERMISSION:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "onRequestPermissionsResult: GRANTED");
-                    } else {
-                        Log.d(TAG, "onRequestPermissionsResult: DENIED");
-                        switchStoragePreference.setChecked(false);
+        if (requestCode == REQUEST_CODE_WRITE_STORAGE_PERMISSION) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: GRANTED");
+                } else {
+                    Log.d(TAG, "onRequestPermissionsResult: DENIED");
+                    switchStoragePreference.setChecked(false);
 
-                        boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permissions[i]);
-                        if (!showRationale) {
-                            // User choose "Don't ask again"
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage(getString(R.string.permission_storage_message))
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .setNeutralButton(R.string.permission_storeage_open_settings,
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    openSettings();
-                                                }
-                                            })
-                                    .create()
-                                    .show();
-                        } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage(getString(R.string.permission_storage_message))
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .create()
-                                    .show();
-                        }
+                    boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()), permissions[i]);
+                    if (!showRationale) {
+                        // User choose "Don't ask again"
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage(getString(R.string.permission_storage_message))
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setNeutralButton(R.string.permission_storage_open_settings,
+                                        (dialogInterface, i1) -> openSettings())
+                                .create()
+                                .show();
+                    } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage(getString(R.string.permission_storage_message))
+                                .setPositiveButton(android.R.string.ok, null)
+                                .create()
+                                .show();
                     }
                 }
-                break;
-            default:
-                Log.e(TAG, "Unknown request: " + requestCode);
-                break;
+            }
+        } else {
+            Log.e(TAG, "Unknown request: " + requestCode);
         }
     }
 
     private void openSettings() {
         Log.d(TAG, "openSettings");
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+        Uri uri = Uri.fromParts("package", Objects.requireNonNull(getActivity()).getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
     }
@@ -180,20 +170,21 @@ public class LogPreferenceFragment extends BasePreferenceFragment
         saveLocationPreference.setEnabled(isEnable);
     }
 
-    @Override
-    public void onSelectDirectory(@NonNull String path) {
-        mDialog.dismiss();
-
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(getString(R.string.log_directory_key), path);
-        editor.apply();
-
-        saveLocationPreference.setSummary(path);
-    }
-
-    @Override
-    public void onCancelChooser() {
-        mDialog.dismiss();
-    }
+    // TODO Add directory choose library
+//    @Override
+//    public void onSelectDirectory(@NonNull String path) {
+//        mDialog.dismiss();
+//
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putString(getString(R.string.log_directory_key), path);
+//        editor.apply();
+//
+//        saveLocationPreference.setSummary(path);
+//    }
+//
+//    @Override
+//    public void onCancelChooser() {
+//        mDialog.dismiss();
+//    }
 }

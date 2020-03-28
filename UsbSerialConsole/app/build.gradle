@@ -32,12 +32,11 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
 
     implementation 'com.jaredrummler:colorpicker:1.1.0'
-
-    implementation 'net.rdrei.android.dirchooser:library:3.2'
 
     // test
     implementation 'junit:junit:4.12'

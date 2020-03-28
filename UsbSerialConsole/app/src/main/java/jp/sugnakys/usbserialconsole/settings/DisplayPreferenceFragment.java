@@ -2,9 +2,11 @@ package jp.sugnakys.usbserialconsole.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.ListPreference;
+
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.util.Util;
@@ -23,7 +25,7 @@ public class DisplayPreferenceFragment extends BasePreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.display_title));
     }
 
@@ -34,7 +36,7 @@ public class DisplayPreferenceFragment extends BasePreferenceFragment {
         if (key.equals(getString(R.string.screen_orientation_key))) {
             Util.setScreenOrientation(
                     ((ListPreference) findPreference(key)).getValue(),
-                    getActivity());
+                    Objects.requireNonNull(getActivity()));
         }
     }
 }

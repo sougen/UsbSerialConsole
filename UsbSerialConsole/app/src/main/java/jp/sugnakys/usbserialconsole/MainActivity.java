@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -31,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,7 +88,7 @@ public class MainActivity extends BaseAppCompatActivity
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
+            switch (Objects.requireNonNull(intent.getAction())) {
                 case UsbService.ACTION_USB_PERMISSION_GRANTED:
                     Toast.makeText(context,
                             getString(R.string.usb_permission_granted),
@@ -127,12 +128,7 @@ public class MainActivity extends BaseAppCompatActivity
     private void requestConnection() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setMessage(getString(R.string.confirm_connect));
-        alertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startConnection();
-            }
-        });
+        alertDialog.setPositiveButton(getString(android.R.string.ok), (dialogInterface, i) -> startConnection());
         alertDialog.setNegativeButton(getString(android.R.string.cancel), null);
         alertDialog.create().show();
     }
@@ -146,17 +142,17 @@ public class MainActivity extends BaseAppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
-        receivedMsgView = (TextView) findViewById(R.id.receivedMsgView);
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-        sendBtn = (Button) findViewById(R.id.sendBtn);
-        sendMsgView = (EditText) findViewById(R.id.sendMsgView);
-        sendViewLayout = (LinearLayout) findViewById(R.id.sendViewLayout);
+        mainLayout = findViewById(R.id.mainLayout);
+        receivedMsgView = findViewById(R.id.receivedMsgView);
+        scrollView = findViewById(R.id.scrollView);
+        sendBtn = findViewById(R.id.sendBtn);
+        sendMsgView = findViewById(R.id.sendMsgView);
+        sendViewLayout = findViewById(R.id.sendViewLayout);
 
         sendBtn.setOnClickListener(this);
         sendMsgView.addTextChangedListener(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -184,14 +180,14 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putString(RECEIVED_TEXT_VIEW_STR, receivedMsgView.getText().toString());
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         receivedMsgView.setText(savedInstanceState.getString(RECEIVED_TEXT_VIEW_STR));
@@ -234,7 +230,7 @@ public class MainActivity extends BaseAppCompatActivity
         sendMsgView.setTextColor(textColor);
 
         setFilters();
-        startService(UsbService.class, usbConnection);
+        startService(usbConnection);
         updateOptionsMenu();
     }
 
@@ -254,12 +250,7 @@ public class MainActivity extends BaseAppCompatActivity
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
             alertDialog.setMessage(getString(R.string.confirm_finish_text));
-            alertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
+            alertDialog.setPositiveButton(getString(android.R.string.ok), (dialogInterface, i) -> finish());
             alertDialog.setNegativeButton(getString(android.R.string.cancel), null);
             alertDialog.create().show();
             return true;
@@ -267,12 +258,12 @@ public class MainActivity extends BaseAppCompatActivity
         return false;
     }
 
-    private void startService(Class<?> service, ServiceConnection serviceConnection) {
+    private void startService(ServiceConnection serviceConnection) {
         if (!UsbService.SERVICE_CONNECTED) {
-            Intent startService = new Intent(this, service);
+            Intent startService = new Intent(this, UsbService.class);
             startService(startService);
         }
-        Intent bindingIntent = new Intent(this, service);
+        Intent bindingIntent = new Intent(this, UsbService.class);
         bindService(bindingIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -472,19 +463,16 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.sendBtn:
-                android.util.Log.d(TAG, "Send button clicked");
-                String message = sendMsgView.getText().toString();
-                if (!message.isEmpty()) {
-                    message += System.lineSeparator();
-                    sendMessage(message);
-                    sendMsgView.setText("");
-                }
-            default:
-                android.util.Log.e(TAG, "Unknown view");
-                break;
+        if (view.getId() == R.id.sendBtn) {
+            android.util.Log.d(TAG, "Send button clicked");
+            String message = sendMsgView.getText().toString();
+            if (!message.isEmpty()) {
+                message += System.lineSeparator();
+                sendMessage(message);
+                sendMsgView.setText("");
+            }
         }
+        android.util.Log.e(TAG, "Unknown view");
     }
 
     private static class MyHandler extends Handler {

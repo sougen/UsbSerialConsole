@@ -17,12 +17,12 @@
         android:title="@string/sleep_mode_title" />
 
     <PreferenceCategory android:title="@string/color_pref_category_title">
-        <com.jrummyapps.android.colorpicker.ColorPreference
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
             android:key="@string/color_console_text_key"
             android:title="@string/color_console_text_title"
             app:cpv_showAlphaSlider="true" />
 
-        <com.jrummyapps.android.colorpicker.ColorPreference
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
             android:key="@string/color_console_background_key"
             android:title="@string/color_console_background_title"
             app:cpv_showAlphaSlider="true" />
