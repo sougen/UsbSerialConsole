@@ -1,11 +1,13 @@
 package jp.sugnakys.usbserialconsole.settings;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
+
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
 
@@ -33,14 +35,9 @@ public class SettingsPreferenceFragment extends BasePreferenceFragment
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.action_settings));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> getActivity().finish());
     }
 
     @Override
@@ -63,11 +60,11 @@ public class SettingsPreferenceFragment extends BasePreferenceFragment
             fragment = new LogPreferenceFragment();
         } else if (key.equals(getString(R.string.license_key))) {
             DialogFragment licenseFragment = new LicenseDialogFragment();
-            licenseFragment.show(getFragmentManager(), LicenseDialogFragment.class.getSimpleName());
+            licenseFragment.show(Objects.requireNonNull(getFragmentManager()), LicenseDialogFragment.class.getSimpleName());
         }
 
         if (simpleName != null) {
-            getFragmentManager()
+            Objects.requireNonNull(getFragmentManager())
                     .beginTransaction()
                     .addToBackStack(simpleName)
                     .replace(R.id.content_frame, fragment, simpleName)

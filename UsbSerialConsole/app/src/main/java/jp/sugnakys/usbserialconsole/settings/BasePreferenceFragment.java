@@ -1,22 +1,30 @@
 package jp.sugnakys.usbserialconsole.settings;
 
 import android.content.SharedPreferences;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.os.Bundle;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.util.Log;
 
-public class BasePreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BasePreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "BasePreferenceFragment";
 
     SharedPreferences sharedPreference;
 
     String[] listPrefKeys;
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // Noting to do
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -35,13 +43,8 @@ public class BasePreferenceFragment extends PreferenceFragment implements Shared
         sharedPreference.registerOnSharedPreferenceChangeListener(this);
         setSummary();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(view -> Objects.requireNonNull(getFragmentManager()).popBackStack());
     }
 
     private void setSummary() {

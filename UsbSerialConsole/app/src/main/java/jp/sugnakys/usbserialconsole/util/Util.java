@@ -7,8 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
-import android.support.v4.content.PermissionChecker;
 import android.util.Log;
+
+import androidx.core.content.PermissionChecker;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

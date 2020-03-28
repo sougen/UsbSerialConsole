@@ -2,9 +2,12 @@ package jp.sugnakys.usbserialconsole.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.SwitchPreference;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.ListPreference;
+import androidx.preference.SwitchPreference;
+
+import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
 
@@ -30,7 +33,7 @@ public class ConnectionPreferenceFragment extends BasePreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.connection_title));
 
         setTimestampEnable(sharedPreference.getBoolean(getString(R.string.timestamp_visible_key), true));
