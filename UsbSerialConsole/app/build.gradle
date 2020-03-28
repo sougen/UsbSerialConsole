@@ -34,9 +34,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
+    // Usb serial
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
 
+    // Color picker
     implementation 'com.jaredrummler:colorpicker:1.1.0'
+
+    // File picker
+    implementation 'com.github.TutorialsAndroid:FilePicker:v8.0.19'
 
     // test
     implementation 'junit:junit:4.12'

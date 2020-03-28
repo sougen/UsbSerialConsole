@@ -17,6 +17,11 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
+import com.developer.filepicker.model.DialogConfigs;
+import com.developer.filepicker.model.DialogProperties;
+import com.developer.filepicker.view.FilePickerDialog;
+
+import java.io.File;
 import java.util.Objects;
 
 import jp.sugnakys.usbserialconsole.R;
@@ -31,7 +36,6 @@ public class LogPreferenceFragment extends BasePreferenceFragment
 
     private SwitchPreference switchStoragePreference;
     private Preference saveLocationPreference;
-//    private DirectoryChooserFragment mDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,16 +91,26 @@ public class LogPreferenceFragment extends BasePreferenceFragment
             }
         } else if (key.equals(getString(R.string.log_directory_key))) {
             Log.d(TAG, android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
-            // TODO Add directory choose library
-//            final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
-//                    .initialDirectory(android.os.Environment.getExternalStorageDirectory().getAbsolutePath())
-//                    .newDirectoryName("New Directory")
-//                    .allowNewDirectoryNameModification(true)
-//                    .build();
-//
-//            mDialog = DirectoryChooserFragment.newInstance(config);
-//            mDialog.setTargetFragment(this, 0);
-//            mDialog.show(getFragmentManager(), null);
+
+            DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.selection_type = DialogConfigs.DIR_SELECT;
+            properties.root = new File(DialogConfigs.DEFAULT_DIR);
+            properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+            properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+            properties.extensions = null;
+            properties.show_hidden_files = false;
+
+            FilePickerDialog dialog = new FilePickerDialog(this.getContext(), properties);
+            dialog.setDialogSelectionListener(files -> {
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getActivity()));
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(getString(R.string.log_directory_key), files[0]);
+                editor.apply();
+
+                saveLocationPreference.setSummary(files[0]);
+            });
+            dialog.show();
         }
 
         return false;
@@ -162,29 +176,11 @@ public class LogPreferenceFragment extends BasePreferenceFragment
         super.onSharedPreferenceChanged(sharedPreferences, key);
 
         if (key.equals(getString(R.string.log_switch_storage_key))) {
-            setSaveLocationEnable(((SwitchPreference) findPreference(key)).isChecked());
+            setSaveLocationEnable(((SwitchPreference) Objects.requireNonNull(findPreference(key))).isChecked());
         }
     }
 
     private void setSaveLocationEnable(boolean isEnable) {
         saveLocationPreference.setEnabled(isEnable);
     }
-
-    // TODO Add directory choose library
-//    @Override
-//    public void onSelectDirectory(@NonNull String path) {
-//        mDialog.dismiss();
-//
-//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        SharedPreferences.Editor editor = pref.edit();
-//        editor.putString(getString(R.string.log_directory_key), path);
-//        editor.apply();
-//
-//        saveLocationPreference.setSummary(path);
-//    }
-//
-//    @Override
-//    public void onCancelChooser() {
-//        mDialog.dismiss();
-//    }
 }
