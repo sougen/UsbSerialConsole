@@ -2,9 +2,10 @@ package jp.sugnakys.usbserialconsole.settings;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 
 import jp.sugnakys.usbserialconsole.BaseAppCompatActivity;
 import jp.sugnakys.usbserialconsole.R;

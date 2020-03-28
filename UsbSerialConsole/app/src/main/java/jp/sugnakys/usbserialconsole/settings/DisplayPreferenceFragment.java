@@ -3,7 +3,8 @@ package jp.sugnakys.usbserialconsole.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
 
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.util.Util;

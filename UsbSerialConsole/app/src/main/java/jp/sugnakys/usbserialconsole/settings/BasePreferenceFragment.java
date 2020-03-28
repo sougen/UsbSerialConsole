@@ -4,8 +4,9 @@ import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
 
 import jp.sugnakys.usbserialconsole.R;
 import jp.sugnakys.usbserialconsole.util.Log;
